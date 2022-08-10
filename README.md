@@ -4,6 +4,21 @@ The library is optimized for extracting difference between source code.
 
 Note: This library is assumed to be used after tokenization. The input format should be `List[List[str]]` that represents "a list of tokens for each line".
 
+## Install
+
+```
+pip install git+https://github.com/ashirafj/differ-for-code
+```
+
+## Usage
+
+```py
+from differ_for_code import differ
+diff = differ.diff(before_tokens, after_tokens)
+```
+
+See more details in the following section.
+
 ## Example
 
 See the code [sample.py](sample.py)
