@@ -1,7 +1,7 @@
 from difflib import SequenceMatcher
 from typing import List, Tuple
 
-from differ_for_code.diffs import (BulkReplace, DiffResult, DiffType, LineDiff,
+from differ_for_code import (BulkReplace, DiffResult, DiffType, LineDiff,
                                    LineReplace, TokenDiff)
 
 
