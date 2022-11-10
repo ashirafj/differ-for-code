@@ -29,6 +29,10 @@ def main():
     print(diff)
     print("-" * 50)
     diff.visualize()
+    print("-" * 50)
+    distance = diff.get_distance()
+    similarity = diff.get_similarity()
+    print(f"Distance: {distance}, Similarity: {similarity}")
     print("-" * 100)
 
 if __name__ == "__main__":

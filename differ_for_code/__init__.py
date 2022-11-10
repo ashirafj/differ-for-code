@@ -262,3 +262,51 @@ class DiffResult:
             else:
                 raise Exception("unknown diff type")
     
+
+    def get_distance(self) -> int:
+        distance = 0
+        for diff in self.diffs:
+            if type(diff) == LineDiff:
+                if diff.label == DiffType.DELETE:
+                    distance += len("".join(diff.before))
+                elif diff.label == DiffType.INSERT:
+                    distance += len("".join(diff.after))
+            elif diff.label == DiffType.BULK_REPLACE:
+                distance += sum(len("".join(line_tokens)) for line_tokens in diff.before)
+                distance += sum(len("".join(line_tokens)) for line_tokens in diff.after)
+            elif diff.label == DiffType.LINE_REPLACE:
+                distance += sum([
+                    len(token_diff.before)
+                    for token_diff in diff.before
+                    if token_diff.label == DiffType.DELETE
+                ])
+                distance += sum([
+                    len(token_diff.after)
+                    for token_diff in diff.after
+                    if token_diff.label == DiffType.INSERT
+                ])
+
+        return distance
+
+
+    def get_similarity(self) -> float:
+        total = 0
+        for diff in self.diffs:
+            if type(diff) == LineDiff:  
+                if diff.label in [ DiffType.DELETE, DiffType.EQUAL ]:
+                    total += len("".join(diff.before))
+                if diff.label in [ DiffType.INSERT, DiffType.EQUAL ]:
+                    total += len("".join(diff.after))
+            elif diff.label == DiffType.BULK_REPLACE:
+                total += sum(len("".join(line_tokens)) for line_tokens in diff.before)
+                total += sum(len("".join(line_tokens)) for line_tokens in diff.after)
+            elif diff.label == DiffType.LINE_REPLACE:
+                total += sum([
+                    len(token_diff.before)
+                    for token_diff in diff.before
+                ])
+                total += sum([
+                    len(token_diff.after)
+                    for token_diff in diff.after
+                ])
+        return 1. - self.get_distance() / total
