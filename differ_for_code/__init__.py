@@ -309,4 +309,9 @@ class DiffResult:
                     len(token_diff.after)
                     for token_diff in diff.after
                 ])
-        return 1. - self.get_distance() / total
+        
+        if total == 0:
+            # no diff
+            return 1
+        else:
+            return 1. - self.get_distance() / total
